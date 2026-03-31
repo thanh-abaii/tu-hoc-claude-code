@@ -1,0 +1,270 @@
+{
+  "description": "Ví dụ cấu hình Claude Code cho các trường hợp sử dụng khác nhau",
+
+  "examples": {
+    "development": {
+      "name": "Môi Trường Phát Triển",
+      "description": "Cấu hình cho công việc phát triển đang hoạt động",
+      "config": {
+        "general": {
+          "model": "claude-sonnet-4-5",
+          "temperature": 0.7
+        },
+        "planning": {
+          "autoEnter": true,
+          "complexityThreshold": 3,
+          "requireApproval": true
+        },
+        "permissions": {
+          "mode": "unrestricted"
+        },
+        "backgroundTasks": {
+          "enabled": true,
+          "maxConcurrentTasks": 3
+        },
+        "hooks": {
+          "PreToolUse:Write": "prettier --write ${file_path}",
+          "PostToolUse:Write": "eslint ${file_path}",
+          "PreCommit": "npm test"
+        }
+      }
+    },
+
+    "code_review": {
+      "name": "Chế Độ Xem Xét Mã Nguồn",
+      "description": "Cấu hình để xem xét mã nguồn mà không sửa đổi",
+      "config": {
+        "general": {
+          "model": "claude-sonnet-4-5",
+          "temperature": 0.3
+        },
+        "permissions": {
+          "mode": "plan"
+        },
+        "extendedThinking": {
+          "enabled": true,
+          "showThinkingProcess": true
+        },
+        "planning": {
+          "autoEnter": false
+        }
+      }
+    },
+
+    "learning": {
+      "name": "Chế Độ Học Tập",
+      "description": "Cấu hình cho học tập và thử nghiệm",
+      "config": {
+        "general": {
+          "model": "claude-sonnet-4-5",
+          "temperature": 0.5
+        },
+        "permissions": {
+          "mode": "confirm"
+        },
+        "extendedThinking": {
+          "enabled": true,
+          "showThinkingProcess": true
+        },
+        "planning": {
+          "autoEnter": true,
+          "requireApproval": true,
+          "showTimeEstimates": true
+        },
+        "checkpoints": {
+          "autoCheckpoint": true
+        }
+      }
+    },
+
+    "production": {
+      "name": "Triển Khai Production",
+      "description": "Cấu hình cho thao tác production với kiểm tra an toàn",
+      "config": {
+        "general": {
+          "model": "claude-opus-4",
+          "temperature": 0.1
+        },
+        "permissions": {
+          "mode": "confirm",
+          "requireConfirmationFor": ["Bash", "Git", "Write", "Edit"]
+        },
+        "hooks": {
+          "PreCommit": "npm test && npm run lint && npm run build",
+          "PrePush": "npm run test:e2e",
+          "PostPush": "~/.claude/hooks/notify-team.sh"
+        },
+        "checkpoints": {
+          "autoCheckpoint": true
+        },
+        "planning": {
+          "autoEnter": true,
+          "requireApproval": true
+        }
+      }
+    },
+
+    "ci_cd": {
+      "name": "Pipeline CI/CD",
+      "description": "Cấu hình cho các thao tác CI/CD tự động",
+      "config": {
+        "general": {
+          "model": "claude-sonnet-4-5",
+          "temperature": 0
+        },
+        "permissions": {
+          "mode": "unrestricted"
+        },
+        "headless": {
+          "exitOnError": true,
+          "verbose": true,
+          "timeout": 3600
+        },
+        "logging": {
+          "level": "debug",
+          "file": "./ci-claude.log"
+        },
+        "planning": {
+          "autoEnter": false,
+          "requireApproval": false
+        }
+      }
+    },
+
+    "security_audit": {
+      "name": "Kiểm Thử Bảo Mật",
+      "description": "Cấu hình cho phân tích mã nguồn tập trung vào bảo mật",
+      "config": {
+        "general": {
+          "model": "claude-opus-4",
+          "temperature": 0.2
+        },
+        "permissions": {
+          "mode": "plan"
+        },
+        "extendedThinking": {
+          "enabled": true,
+          "showThinkingProcess": true,
+          "minThinkingTime": 10
+        },
+        "hooks": {
+          "PostToolUse:Read": "~/.claude/hooks/security-scan.sh ${file_path}"
+        }
+      }
+    },
+
+    "performance_optimization": {
+      "name": "Tối Ưu Hiệu Suất",
+      "description": "Cấu hình cho phân tích hiệu suất và tối ưu hóa",
+      "config": {
+        "general": {
+          "model": "claude-sonnet-4-5",
+          "temperature": 0.4
+        },
+        "planning": {
+          "autoEnter": true,
+          "requireApproval": true
+        },
+        "backgroundTasks": {
+          "enabled": true,
+          "maxConcurrentTasks": 5
+        },
+        "checkpoints": {
+          "autoCheckpoint": true
+        }
+      }
+    },
+
+    "pair_programming": {
+      "name": "Lập Trình Đôi",
+      "description": "Cấu hình cho phát triển hợp tác",
+      "config": {
+        "general": {
+          "model": "claude-sonnet-4-5",
+          "temperature": 0.6
+        },
+        "permissions": {
+          "mode": "confirm"
+        },
+        "planning": {
+          "autoEnter": true,
+          "requireApproval": true,
+          "showTimeEstimates": true
+        },
+        "extendedThinking": {
+          "enabled": true,
+          "showThinkingProcess": true
+        },
+        "ui": {
+          "compactMode": false,
+          "showProgress": true
+        }
+      }
+    },
+
+    "refactoring": {
+      "name": "Tái Cấu Trúc Lớn",
+      "description": "Cấu hình cho công việc tái cấu trúc lớn",
+      "config": {
+        "general": {
+          "model": "claude-opus-4",
+          "temperature": 0.3
+        },
+        "planning": {
+          "autoEnter": true,
+          "requireApproval": true,
+          "showTimeEstimates": true
+        },
+        "checkpoints": {
+          "autoCheckpoint": true
+        },
+        "hooks": {
+          "PreToolUse:Edit": "~/.claude/hooks/backup-file.sh ${file_path}",
+          "PostToolUse:Edit": "npm test -- --findRelatedTests ${file_path}"
+        },
+        "permissions": {
+          "mode": "confirm"
+        }
+      }
+    },
+
+    "autonomous": {
+      "name": "Phát Triển Tự Chủ",
+      "description": "Cấu hình cho công việc tự chủ với kiểm tra an toàn chế độ auto",
+      "config": {
+        "general": {
+          "model": "claude-sonnet-4-6",
+          "temperature": 0.5
+        },
+        "permissions": {
+          "mode": "auto"
+        },
+        "sandbox": {
+          "enabled": true,
+          "failIfUnavailable": false
+        },
+        "backgroundTasks": {
+          "enabled": true,
+          "maxConcurrentTasks": 3
+        }
+      }
+    },
+
+    "documentation": {
+      "name": "Viết Tài Liệu",
+      "description": "Cấu hình cho viết tài liệu",
+      "config": {
+        "general": {
+          "model": "claude-sonnet-4-5",
+          "temperature": 0.7
+        },
+        "permissions": {
+          "mode": "unrestricted"
+        },
+        "hooks": {
+          "PostToolUse:Write": "markdownlint ${file_path}"
+        }
+      }
+    }
+  }
+}
